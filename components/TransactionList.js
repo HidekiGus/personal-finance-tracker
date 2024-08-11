@@ -3,33 +3,34 @@ import { useTransactions } from '../context/TransactionsContext';
 import { getTransactions, deleteTransaction } from '../utils/api';
 
 const TransactionList = () => {
-  const { state, dispatch } = useTransactions();
+  // const { state, dispatch } = useTransactions();
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      const transactions = await getTransactions();
-      dispatch({ type: 'SET_TRANSACTIONS', payload: transactions });
-    };
-    fetchTransactions();
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const fetchTransactions = async () => {
+  //     const transactions = await getTransactions();
+  //     dispatch({ type: 'SET_TRANSACTIONS', payload: transactions });
+  //   };
+  //   fetchTransactions();
+  // }, [dispatch]);
 
-  const handleDelete = async (id) => {
-    await deleteTransaction(id);
-    dispatch({ type: 'DELETE_TRANSACTION', payload: id });
-  };
+  // const handleDelete = async (id) => {
+  //   await deleteTransaction(id);
+  //   dispatch({ type: 'DELETE_TRANSACTION', payload: id });
+  // };
 
   return (
-    <div>
+    <>
       <h2>Transactions</h2>
-      <ul>
+      {/* <div>
+        {state.transactions.length > 0 ? "Você não tem transações" : null}
         {state.transactions.map(transaction => (
           <li key={transaction.id}>
             {transaction.description} - ${transaction.amount}
-            <button onClick={() => handleDelete(transaction.id)}>Delete</button>
+            <Botao onClick={() => handleDelete(transaction.id)}>Delete</Botao>
           </li>
-        ))}
-      </ul>
-    </div>
+        ))
+      </div> */}
+    </>
   );
 };
 
