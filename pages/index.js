@@ -1,6 +1,6 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import TransactionList from '../components/TransactionList';
+// import TransactionList from '../components/TransactionList';
 import Body from '../components/Body';
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
     <div>
       <Header />
       <main>
-        <TransactionList />
+        {/* <TransactionList /> */}
         <Body />
       </main>
       <Footer />
