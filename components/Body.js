@@ -29,16 +29,19 @@ const TransacaoCard = () => {
 
     return (
         <Transacao>
-            <div>editar x</div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px' }}>︙</div>
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
+                justifyContent: 'space-evenly',
                 alignItems: 'center',
                 width: '80%',
-                height: '100%'
+                height: '100%',
+                minHeight: '80px'
             }}>
-                <div style={{ fontSize: 20 }}>{title}</div>
+                <div style={{
+                    fontSize: 20, textAlign: 'left', width: '90%'
+                }}>{title}</div>
                 <div style={{
                     display: 'flex',
                     width: '90%',
@@ -61,9 +64,8 @@ const Transacao = styled.div`
     height: fit-content;
     background-color: lightblue;
     border-radius: 10px;
-    padding: 10px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    padding: 5px;
+    margin-bottom: 10px;
 
     display: flex;
     flex-direction: row;
