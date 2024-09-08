@@ -8,24 +8,83 @@ const Body = () => {
         setTransacoes([...transacoes, <TransacaoCard key={transacoes.length} />]);
     };
 
+    const [title, setTitle] = useState('');
+    const [valor, setValor] = useState(null);
+
+    const handleTitleChange = (e) => setTitle(e.target.value);
+    const handleValorChange = (e) => setValor(e.target.value);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setTransacoes([<TransacaoCard titulo={title} valorEntrada={valor} key={transacoes.length} />, ...transacoes]);
+        setTitle('');
+        setValor(null);
+    };
+
     return (
         <MainContainer>
-            <Botao onClick={handleClick}>
+            <form style={{
+                height: '200px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                // justifyContent: 'space-evenly',
+            }} onSubmit={handleSubmit}>
+                <div style={{ width: '80%' }}>
+                    <label>Título:</label>
+                    <input style={{
+                        height: '35px',
+                        backgroundColor: 'lightgrey',
+                        borderRadius: '8px',
+                        paddingLeft: '10px',
+                        fontSize: '18px',
+                        marginLeft: '5px'
+                    }} placeholder="Insira o título aqui" type="text" value={title} onChange={handleTitleChange} required />
+                </div>
+                <div style={{ width: '80%' }}>
+                    <label>Valor:</label>
+                    <input style={{
+                        height: '35px',
+                        backgroundColor: 'lightgrey',
+                        borderRadius: '8px',
+                        paddingLeft: '10px',
+                        fontSize: '18px',
+                        marginLeft: '5px'
+                    }} placeholder="Insira o valor aqui" type="number" step=".01" value={valor} onChange={handleValorChange} required />
+                </div>
+                <button style={{
+                    height: '80px',
+                    width: '200px',
+                    borderRadius: '200px',
+                    justifySelf: 'center',
+                    alignSelf: 'center',
+                    fontSize: '24px',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    backgroundColor: 'darkgrey',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 2px 5px black',
+                    marginTop: '20px'
+                }} type="submit">Adicionar</button>
+            </form>
+            {/* <Botao onClick={handleClick}>
                 Adicionar transação
-            </Botao>
+            </Botao> */}
             <TransacoesContainer>
                 {transacoes.length ? transacoes.map((transacao, index) => (
                     <Transacao key={index}>{transacao}</Transacao>
                 )) : 'Nenhuma transação para mostrar.'}
             </TransacoesContainer>
-        </MainContainer>
+        </MainContainer >
     );
 };
 
-const TransacaoCard = () => {
+const TransacaoCard = ({ titulo, valorEntrada }) => {
 
-    const [title, setTitle] = useState('Sorvetinho na Sesamo');
-    const [valor, setValor] = useState('20,00');
+    const [title, setTitle] = useState(titulo);
+    const [valor, setValor] = useState(String(valorEntrada).replace(".", ","));
 
     return (
         <Transacao>
@@ -51,7 +110,7 @@ const TransacaoCard = () => {
                     flexDirection: 'row'
                 }}>
                     <div>Valor:</div>
-                    <div>R${valor}</div>
+                    <div>R$ {valor}</div>
                 </div>
             </div>
         </Transacao>
@@ -99,6 +158,34 @@ const MainContainer = styled.div`
     flex-direction: column;
     align-items: space-around;
     justify-content: center;
+
+    form {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    label,
+    input {
+        /* In order to define widths */
+        display: inline-block;
+    }
+
+    label {
+        width: 30%;
+        /* Positions the label text beside the input */
+        text-align: right;
+    }
+
+    label+input {
+        width: 88%;
+    }
+
+    /* Only the submit button is matched by this selector,
+        but to be sure you could use an id or class for that button */
+
+    input+input {
+        float: right;
+    }
 `;
 
 const TransacoesContainer = styled.div`
