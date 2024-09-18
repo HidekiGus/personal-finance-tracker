@@ -25,8 +25,6 @@ const Body = () => {
                 const response = await fetch(`${API_URL}`).then((res) => { return res.json() });
                 console.log(response);
                 setData(response);
-                //const fetchedData = await response.json();
-                //setTransactions([]); // Update transactions state
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -45,10 +43,6 @@ const Body = () => {
 
         try {
             await addTransaction({ title, amount, category, type });
-            // setTransactions((prevTransactions) => [
-            //     ...prevTransactions,
-            //     { title, amount, category, type }, // Add new transaction to state
-            // ]);
             setTitle('');
             setAmount('');
             setCategory('');
