@@ -1,34 +1,71 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { addTransaction, getTransactions, API_URL } from '../utils/api';
 
 const Body = () => {
     const [transacoes, setTransacoes] = useState([]);
-
-    const handleClick = () => {
-        setTransacoes([...transacoes, <TransacaoCard key={transacoes.length} />]);
-    };
+    const [data, setData] = useState([]);
 
     const [title, setTitle] = useState('');
-    const [valor, setValor] = useState(null);
+    const [amount, setAmount] = useState('');
+    const [category, setCategory] = useState('');
+    const [tipo, setTipo] = useState('');
 
+    //Group of handlers-------------------------------------------------\\
     const handleTitleChange = (e) => setTitle(e.target.value);
-    const handleValorChange = (e) => setValor(e.target.value);
+    const handleAmountChange = (e) => setAmount(e.target.value);
+    const handleCategoryChange = (e) => setCategory(e.target.value);
+    const handleTypeChange = (e) => setTipo(e.target.value);
+    //------------------------------------------------------------------//
 
-    const handleSubmit = (e) => {
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${API_URL}`).then((res) => { return res.json() });
+                console.log(response);
+                setData(response);
+                //const fetchedData = await response.json();
+                //setTransactions([]); // Update transactions state
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData(); // Fetch data on component mount
+    }, []); // Empty dependency array for initial fetch
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setTransacoes([<TransacaoCard titulo={title} valorEntrada={valor} key={transacoes.length} />, ...transacoes]);
-        setTitle('');
-        setValor(null);
+
+        if (!title || !amount || !category || !type) {
+            alert('Please fill in all fields.');
+            return; // Prevent submission if required fields are empty
+        }
+
+        try {
+            await addTransaction({ title, amount, category, type });
+            // setTransactions((prevTransactions) => [
+            //     ...prevTransactions,
+            //     { title, amount, category, type }, // Add new transaction to state
+            // ]);
+            setTitle('');
+            setAmount('');
+            setCategory('');
+            setType('');
+        } catch (error) {
+            console.error('Error adding transaction:', error);
+            alert('Error adding transaction. Please try again.');
+        }
     };
 
     return (
         <MainContainer>
             <form style={{
-                height: '200px',
+                height: '280px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                // justifyContent: 'space-evenly',
             }} onSubmit={handleSubmit}>
                 <div style={{ width: '80%' }}>
                     <label>Título:</label>
@@ -39,7 +76,8 @@ const Body = () => {
                         paddingLeft: '10px',
                         fontSize: '18px',
                         marginLeft: '5px'
-                    }} placeholder="Insira o título aqui" type="text" value={title} onChange={handleTitleChange} required />
+                    }} placeholder="Insira o título aqui" type="text" value={title}
+                        onChange={handleTitleChange} required />
                 </div>
                 <div style={{ width: '80%' }}>
                     <label>Valor:</label>
@@ -50,7 +88,32 @@ const Body = () => {
                         paddingLeft: '10px',
                         fontSize: '18px',
                         marginLeft: '5px'
-                    }} placeholder="Insira o valor aqui" type="number" step=".01" value={valor} onChange={handleValorChange} required />
+                    }} placeholder="Insira o valor aqui" type="text" value={amount}
+                        onChange={handleAmountChange} required />
+                </div>
+                <div style={{ width: '80%' }}>
+                    <label>Categoria:</label>
+                    <input style={{
+                        height: '35px',
+                        backgroundColor: 'lightgrey',
+                        borderRadius: '8px',
+                        paddingLeft: '10px',
+                        fontSize: '18px',
+                        marginLeft: '5px'
+                    }} placeholder="Insira a categoria aqui" type="text" value={category}
+                        onChange={handleCategoryChange} />
+                </div>
+                <div style={{ width: '80%' }}>
+                    <label>Tipo:</label>
+                    <input style={{
+                        height: '35px',
+                        backgroundColor: 'lightgrey',
+                        borderRadius: '8px',
+                        paddingLeft: '10px',
+                        fontSize: '18px',
+                        marginLeft: '5px'
+                    }} placeholder="Gasto/Ganho/Investimento" type="text" value={tipo}
+                        onChange={handleTypeChange} />
                 </div>
                 <button style={{
                     height: '80px',
@@ -69,13 +132,11 @@ const Body = () => {
                     marginTop: '20px'
                 }} type="submit">Adicionar</button>
             </form>
-            {/* <Botao onClick={handleClick}>
-                Adicionar transação
-            </Botao> */}
             <TransacoesContainer>
-                {transacoes.length ? transacoes.map((transacao, index) => (
-                    <Transacao key={index}>{transacao}</Transacao>
-                )) : 'Nenhuma transação para mostrar.'}
+                {console.log(data)}
+                {data.length ? (data.map((transacao, index) => (
+                    <TransacaoCard key={index} titulo={transacao.title} valorEntrada={transacao.amount}>{transacao}</TransacaoCard>
+                ))) : 'Nenhuma transação para mostrar.'}
             </TransacoesContainer>
         </MainContainer >
     );
@@ -84,7 +145,7 @@ const Body = () => {
 const TransacaoCard = ({ titulo, valorEntrada }) => {
 
     const [title, setTitle] = useState(titulo);
-    const [valor, setValor] = useState(String(valorEntrada).replace(".", ","));
+    const [valor, setValor] = useState(valorEntrada);
 
     return (
         <Transacao>
@@ -98,9 +159,9 @@ const TransacaoCard = ({ titulo, valorEntrada }) => {
                 height: '100%',
                 minHeight: '80px'
             }}>
-                <div style={{
-                    fontSize: 20, textAlign: 'left', width: '90%'
-                }}>{title}</div>
+                <div style={{ fontSize: 20, textAlign: 'left', width: '90%' }}>
+                    {title}
+                </div>
                 <div style={{
                     display: 'flex',
                     width: '90%',

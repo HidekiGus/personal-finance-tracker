@@ -1,4 +1,5 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useEffect, useContext, useReducer } from 'react';
+import { getTransactions } from '../utils/api';
 
 // Initial state
 const initialState = {
@@ -34,6 +35,19 @@ const TransactionsContext = createContext();
 // Context Provider
 export const TransactionsProvider = ({ children }) => {
   const [state, dispatch] = useReducer(transactionsReducer, initialState);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const transactions = await getTransactions();
+        dispatch({ type: 'SET_TRANSACTIONS', payload: transactions });
+      } catch (error) {
+        // Handle errors (e.g., display an error message)
+        console.error('Error fetching transactions:', error);
+      }
+    };
+    fetchTransactions();
+  }, []);
 
   const addTransaction = (transaction) => {
     dispatch({ type: 'ADD_TRANSACTION', payload: transaction });
