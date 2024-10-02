@@ -36,17 +36,17 @@ const Body = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!title || !amount || !category || !type) {
-            alert('Please fill in all fields.');
+        if (!title || !amount) {
+            alert('Título e Valor são obrigatórios.');
             return; // Prevent submission if required fields are empty
         }
 
         try {
-            await addTransaction({ title, amount, category, type });
+            await addTransaction({ title, amount, category, tipo });
             setTitle('');
             setAmount('');
             setCategory('');
-            setType('');
+            setTipo('');
         } catch (error) {
             console.error('Error adding transaction:', error);
             alert('Error adding transaction. Please try again.');
@@ -56,78 +56,30 @@ const Body = () => {
     return (
         <MainContainer>
             <form style={{
-                height: '280px',
+                height: '300px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
             }} onSubmit={handleSubmit}>
                 <div style={{ width: '80%' }}>
-                    <label>Título:</label>
-                    <input style={{
-                        height: '35px',
-                        backgroundColor: 'lightgrey',
-                        borderRadius: '8px',
-                        paddingLeft: '10px',
-                        fontSize: '18px',
-                        marginLeft: '5px'
-                    }} placeholder="Insira o título aqui" type="text" value={title}
+                    <Input placeholder="Insira o título aqui" type="text" value={title}
                         onChange={handleTitleChange} required />
                 </div>
                 <div style={{ width: '80%' }}>
-                    <label>Valor:</label>
-                    <input style={{
-                        height: '35px',
-                        backgroundColor: 'lightgrey',
-                        borderRadius: '8px',
-                        paddingLeft: '10px',
-                        fontSize: '18px',
-                        marginLeft: '5px'
-                    }} placeholder="Insira o valor aqui" type="text" value={amount}
+                    <Input placeholder="Insira o valor aqui" type="text" value={amount}
                         onChange={handleAmountChange} required />
                 </div>
                 <div style={{ width: '80%' }}>
-                    <label>Categoria:</label>
-                    <input style={{
-                        height: '35px',
-                        backgroundColor: 'lightgrey',
-                        borderRadius: '8px',
-                        paddingLeft: '10px',
-                        fontSize: '18px',
-                        marginLeft: '5px'
-                    }} placeholder="Insira a categoria aqui" type="text" value={category}
+                    <Input placeholder="Insira a categoria aqui" type="text" value={category}
                         onChange={handleCategoryChange} />
                 </div>
                 <div style={{ width: '80%' }}>
-                    <label>Tipo:</label>
-                    <input style={{
-                        height: '35px',
-                        backgroundColor: 'lightgrey',
-                        borderRadius: '8px',
-                        paddingLeft: '10px',
-                        fontSize: '18px',
-                        marginLeft: '5px'
-                    }} placeholder="Gasto/Ganho/Investimento" type="text" value={tipo}
+                    <Input placeholder="Gasto/Ganho/Investimento" type="text" value={tipo}
                         onChange={handleTypeChange} />
                 </div>
-                <button style={{
-                    height: '80px',
-                    width: '200px',
-                    borderRadius: '200px',
-                    justifySelf: 'center',
-                    alignSelf: 'center',
-                    fontSize: '24px',
-                    textAlign: 'center',
-                    cursor: 'pointer',
-                    backgroundColor: 'darkgrey',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 2px 5px black',
-                    marginTop: '20px'
-                }} type="submit">Adicionar</button>
+                <Button type="submit">Adicionar</Button>
             </form>
             <TransacoesContainer>
-                {console.log(data)}
                 {data.length ? (data.map((transacao, index) => (
                     <TransacaoCard key={index} titulo={transacao.title} valorEntrada={transacao.amount}>{transacao}</TransacaoCard>
                 ))) : 'Nenhuma transação para mostrar.'}
@@ -173,37 +125,20 @@ const TransacaoCard = ({ titulo, valorEntrada }) => {
 };
 
 const Transacao = styled.div`
-    width: 100%;
+    width: 94%;
     min-height: 60px;
     height: fit-content;
     background-color: lightblue;
-    border-radius: 10px;
+    border-radius: 25px;
     padding: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 7px;
+    margin-top: 7px;
+    border: 1px solid rgba(0, 178, 255, 0.15);
+    box-shadow: 1px 1px rgba(122, 122, 122, 0.4);
 
     display: flex;
     flex-direction: row;
     align-items: space-between;
-`;
-
-const Botao = styled.div`
-    height: 80px;
-    width: 200px;
-    border-radius: 200px;
-    justify-self: center;
-    align-self: center;
-    font-size: 24px;
-    text-align: center;
-    cursor: pointer;
-    background-color: darkgrey;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px black;
-
-    /* &:hover {
-        background-color: grey;
-    } */
 `;
 
 const MainContainer = styled.div`
@@ -211,7 +146,7 @@ const MainContainer = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: space-around;
+    align-items: center;
     justify-content: center;
 
     form {
@@ -245,11 +180,46 @@ const MainContainer = styled.div`
 
 const TransacoesContainer = styled.div`
     margin-top: 20px;
-    width: 100%;
+    padding-top: 10px;
+    border-radius: 10px;
+    width: 97vw;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     flex-direction: column;
+    background-color: rgba(122, 122, 122, 0.4);
+`;
+
+const Input = styled.input`
+    height: 35px;
+    background-color: lightgrey;
+    border-radius: 8px;
+    padding-left: 10px;
+    font-size: 18px;
+    margin-left: 5px;
+    width: 230px;
+
+    ::placeholder {
+        color: #888;
+        font-style: italic;
+    }
+`;
+
+const Button = styled.button`
+    height: 80px;
+    width: 200px;
+    border-radius: 200px;
+    justify-self: center;
+    align-self: center;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    background-color: darkgrey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px black;
+    margin-top: 20px;
 `;
 
 export default Body;
