@@ -55,30 +55,25 @@ const Body = () => {
 
     return (
         <MainContainer>
-            <form style={{
-                height: '300px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-            }} onSubmit={handleSubmit}>
-                <div style={{ width: '80%' }}>
+            <Formulario onSubmit={handleSubmit}>
+                <Field>
                     <Input placeholder="Insira o título aqui" type="text" value={title}
                         onChange={handleTitleChange} required />
-                </div>
-                <div style={{ width: '80%' }}>
+                </Field>
+                <Field>
                     <Input placeholder="Insira o valor aqui" type="text" value={amount}
                         onChange={handleAmountChange} required />
-                </div>
-                <div style={{ width: '80%' }}>
+                </Field>
+                <Field>
                     <Input placeholder="Insira a categoria aqui" type="text" value={category}
                         onChange={handleCategoryChange} />
-                </div>
-                <div style={{ width: '80%' }}>
+                </Field>
+                <Field>
                     <Input placeholder="Gasto/Ganho/Investimento" type="text" value={tipo}
                         onChange={handleTypeChange} />
-                </div>
+                </Field>
                 <Button type="submit">Adicionar</Button>
-            </form>
+            </Formulario>
             <TransacoesContainer>
                 {data.length ? (data.map((transacao, index) => (
                     <TransacaoCard key={index} titulo={transacao.title} valorEntrada={transacao.amount}>{transacao}</TransacaoCard>
@@ -197,7 +192,7 @@ const Input = styled.input`
     padding-left: 10px;
     font-size: 18px;
     margin-left: 5px;
-    width: 230px;
+    width: 90%;
 
     ::placeholder {
         color: #888;
@@ -206,9 +201,9 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-    height: 80px;
-    width: 200px;
-    border-radius: 200px;
+    height: 60px;
+    width: 220px;
+    border-radius: 10px;
     justify-self: center;
     align-self: center;
     font-size: 24px;
@@ -218,8 +213,19 @@ const Button = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px black;
+    box-shadow: 0 2px 5px darkgrey;
     margin-top: 20px;
+`;
+
+const Field = styled.div`
+    margin: 5px 0;
+`;
+
+const Formulario = styled.form`
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: space-evenly;
 `;
 
 export default Body;
